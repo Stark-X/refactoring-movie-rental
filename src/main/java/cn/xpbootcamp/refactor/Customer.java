@@ -1,6 +1,6 @@
 package cn.xpbootcamp.refactor;
 
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 public class Customer {
@@ -23,10 +23,12 @@ public class Customer {
     String statement() {
         double totalAmount = 0d;
         int frequentRenterPoints = 0;
-        Enumeration<Rental> rentals = this.rentals.elements();
+
+        Iterator<Rental> rentalIterator = this.rentals.iterator();
+
         StringBuilder result = new StringBuilder("Rental Record for " + getName() + "：\n");
-        while (rentals.hasMoreElements()) {
-            Rental each = rentals.nextElement();
+        while (rentalIterator.hasNext()) {
+            Rental each = rentalIterator.next();
             //show figures for this rental
             //determine amounts for each line
             double thisAmount = 0d;
