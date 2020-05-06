@@ -21,7 +21,7 @@ public class Customer {
     }
 
     String statement() {
-        double totalAmount = 0d;
+        double totalPriceAmount = 0d;
         int frequentRenterPoints = 0;
 
         Iterator<Rental> rentalIterator = this.rentals.iterator();
@@ -31,8 +31,8 @@ public class Customer {
             Rental each = rentalIterator.next();
             //show figures for this rental
             //determine amounts for each line
-            double thisAmount = 0d;
-            thisAmount = calcAmount(each, thisAmount);
+            double priceAmount = 0d;
+            priceAmount = calcAmount(each, priceAmount);
             //add frequent renter points
             frequentRenterPoints++;
             if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
@@ -42,11 +42,11 @@ public class Customer {
             result.append("\t")
                   .append(each.getMovie().getTitle())
                   .append("\t")
-                  .append(thisAmount).append("\n");
-            totalAmount += thisAmount;
+                  .append(priceAmount).append("\n");
+            totalPriceAmount += priceAmount;
         }
         //add footer lines
-        result.append("Amount owed is ").append(totalAmount).append("\n");
+        result.append("Amount owed is ").append(totalPriceAmount).append("\n");
         result.append("You earned ").append(frequentRenterPoints).append(" frequent renter points");
         return result.toString();
     }
