@@ -1,6 +1,8 @@
 package cn.xpbootcamp.refactor;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 public class Customer {
@@ -26,7 +28,12 @@ public class Customer {
 
         Iterator<Rental> rentalIterator = this.rentals.iterator();
 
-        StringBuilder result = new StringBuilder("Rental Record for " + getName() + "：\n");
+        ResultSet resultSet = new ResultSet();
+        Map<String, String> resultData = new HashMap<>();
+
+        resultData.put("customerName", getName());
+        resultSet.append(ResultSet.ResultTypeEnum.TITLE, resultData);
+
         while (rentalIterator.hasNext()) {
             Rental each = rentalIterator.next();
             Calculator calculator = new Calculator(each);
@@ -35,17 +42,21 @@ public class Customer {
             priceAmount = calculator.calcAmount(priceAmount);
             frequentRenterPoints = calculator.calcFrequentRenterPoints(frequentRenterPoints);
 
+            Movie movie = each.getMovie();
+            resultData.put("movieTitle", movie.getTitle());
+            resultData.put("priceAmount", String.valueOf(priceAmount));
+            resultSet.append(ResultSet.ResultTypeEnum.PRICE_AMOUNT, resultData);
+
             //show figures for this rental
-            result.append("\t")
-                  .append(each.getMovie().getTitle())
-                  .append("\t")
-                  .append(priceAmount).append("\n");
             totalPriceAmount += priceAmount;
         }
         //add footer lines
-        result.append("Amount owed is ").append(totalPriceAmount).append("\n");
-        result.append("You earned ").append(frequentRenterPoints).append(" frequent renter points");
-        return result.toString();
+        resultData.put("totalPriceAmount", String.valueOf(totalPriceAmount));
+        resultSet.append(ResultSet.ResultTypeEnum.TOTAL_PRICE_AMOUNT, resultData);
+
+        resultData.put("frequentRenterPoints", String.valueOf(frequentRenterPoints));
+        resultSet.append(ResultSet.ResultTypeEnum.FREQUENT_RENTER_POINT, resultData);
+        return resultSet.render();
     }
 
 }
